@@ -3,6 +3,7 @@ import { LogoSvg } from '../../assets/logo/logoSvg'
 import { ChatIcon, CommunityIcon, FavIcon, LogOutIcon, MoviesIcon, SettingsIcon, TrendingIcon } from '../../assets/images/icons'
 import CustomNavLink from '../navLinkComp/CustomNavLink'
 import React from 'react'
+import Header from '../header/Header'
 
 
 export type Link = {
@@ -99,6 +100,7 @@ function Layout() {
                 </nav>
             </aside>
             <main className='w-[83.33%]'>
+                <Header />
                 <Outlet />
             </main>
         </div>

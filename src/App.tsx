@@ -7,6 +7,7 @@ import NotAuthenticated from "./pages/error-page/404";
 import store from "./redux/store/rootStore";
 import { Provider } from "react-redux";
 import Layout from "./components/layout/Layout";
+import Favourite from "./pages/Favourite/Favourite";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
+              <Route path='/favourite' element={<Favourite />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

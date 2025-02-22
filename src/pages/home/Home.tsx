@@ -1,4 +1,3 @@
-import Header from "../../components/header/Header";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { RootState } from "../../redux/store/rootStore";
 import { removeFromWatchList, addToWatchList } from "../../redux/UserSlice/UserSlice";
@@ -22,6 +21,7 @@ function Home() {
   const [isAutoScrolling, setIsAutoScrolling] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef2 = useRef<HTMLDivElement>(null)
 
   const movies: Movie[] = [
     {
@@ -208,9 +208,25 @@ function Home() {
     exit: { opacity: 0, x: -100 },
   };
 
+
+  // const handleScrollRight = () => {
+  //   if (containerRef2.current) {
+  //     containerRef2.current.style.scrollBehavior = "smooth"
+  //     containerRef2.current.scrollLeft += containerRef2.current.clientWidth;
+  //   }
+  // };
+
+
+
+  // const handleScrollLeft = () => {
+  //   if (containerRef2.current) {
+  //     containerRef2.current.style.scrollBehavior = "smooth"
+  //     containerRef2.current.scrollLeft -= containerRef2.current.clientWidth;
+  //   }
+  // }
+
   return (
     <div>
-      <Header />
       <div
         ref={containerRef}
         className="h-[455px] w-full flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide"
@@ -253,25 +269,28 @@ function Home() {
         </AnimatePresence>
       </div>
 
-      <div className="flex overflow-x-hidden overflow-y-visible mt-10 gap-3 h-[500px]">
-        {movies.map((movie, key) => (
-          <MovieCard
-            key={movie.id}
-            isInWatchList={user?.watchList.includes(movie.id.toString()) ?? false}
-            genre={movie.genre}
-            title={movie.title}
-            year={movie.year}
-            image={movie.image}
-            id={movie.id}
-            movieKey={key}
-            isActive={index === key}
-            onClick={() => handleMovieCardClick(key)}
-            className="w-[15vw] h-fit flex-shrink-0 border-white border-2 rounded-lg shadow-lg font-Poppins text-black relative select-none hover:scale-105 hover:opacity-100 cursor-pointer transition-all duration-300"
-            addToWatchList={() => handleAddToWatchList(movie.id.toString())}
-            removeFromWatchList={() => handleRemoveFromWatchList(movie.id.toString())}
-            setIndex={setIndex}
-          />
-        ))}
+      <div className="mt-5">
+        <h1 className="text-4xl font-bold ml-4 text-white font-Poppins">Trending</h1>
+        <div ref={containerRef2} className="flex overflow-x-auto overflow-y-visible mt-5 gap-5 h-[500px]">
+          {movies.map((movie, key) => (
+            <MovieCard
+              key={movie.id}
+              isInWatchList={user?.watchList.includes(movie.id.toString()) ?? false}
+              genre={movie.genre}
+              title={movie.title}
+              year={movie.year}
+              image={movie.image}
+              id={movie.id}
+              movieKey={key}
+              isActive={index === key}
+              onClick={() => handleMovieCardClick(key)}
+              className="w-[17.8vw] ml-4 overflow-hidden h-fit flex-shrink-0 border-white border-2 rounded-lg shadow-lg font-Poppins text-black relative select-none hover:scale-105 hover:opacity-100 cursor-pointer transition-all duration-300"
+              addToWatchList={() => handleAddToWatchList(movie.id.toString())}
+              removeFromWatchList={() => handleRemoveFromWatchList(movie.id.toString())}
+              setIndex={setIndex}
+            />
+          ))}
+        </div>
       </div>
 
     </div>
