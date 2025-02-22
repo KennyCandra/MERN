@@ -2,10 +2,10 @@ import { NavLink } from 'react-router-dom'
 import type { Link } from '../layout/Layout'
 interface CustomNavLinkProps {
     link: Link
-    getClassName: (isActive: boolean) => string
+    getClassName: (isActive: boolean) => string,
 }
 
-function CustomNavLink({ link, getClassName }: CustomNavLinkProps) {
+function CustomNavLink({ link, getClassName  }: CustomNavLinkProps) {
     return (
         <NavLink
             to={link.path}

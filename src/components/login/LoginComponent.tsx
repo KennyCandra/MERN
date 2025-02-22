@@ -64,6 +64,7 @@ function LoginComponent({ error, setError }: { error: ErrorState | null, setErro
                 setError({type : 'success', message : 'Login successful'})
                 const data = await response.json();
                 setUser(data.user);
+                localStorage.setItem('accessToken' , data.accessToken)
                 navigate('/');
             }
         } catch (error) {

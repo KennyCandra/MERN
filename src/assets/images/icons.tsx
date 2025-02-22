@@ -183,12 +183,13 @@ export const NotificationIcon: React.FC<IconProps> = ({ className }) => {
 interface HugIconProps extends IconProps {
     className: string;
     shouldFill?: boolean;
+    handleClick: () => void;
 }
 
 
-export const HugIcon: React.FC<HugIconProps> = ({ className, shouldFill }: HugIconProps) => {
+export const HugIcon: React.FC<HugIconProps> = ({ className, shouldFill, handleClick }: HugIconProps) => {
     return (
-        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} onClick={handleClick}>
             <rect x="0.5" y="0.5" width="55" height="55" rx="14.5" fill="url(#paint0_linear_10_83)" />
             <rect x="0.5" y="0.5" width="55" height="55" rx="14.5" stroke="url(#paint1_linear_10_83)" />
             <path d="M36.8401 20.6101C36.3294 20.0991 35.7229 19.6938 35.0555 19.4172C34.388 19.1406 33.6726 18.9983 32.9501 18.9983C32.2276 18.9983 31.5122 19.1406 30.8448 19.4172C30.1773 19.6938 29.5709 20.0991 29.0601 20.6101L28.0001 21.6701L26.9401 20.6101C25.9084 19.5784 24.5092 18.9988 23.0501 18.9988C21.5911 18.9988 20.1918 19.5784 19.1601 20.6101C18.1284 21.6418 17.5488 23.0411 17.5488 24.5001C17.5488 25.9591 18.1284 27.3584 19.1601 28.3901L20.2201 29.4501L28.0001 37.2301L35.7801 29.4501L36.8401 28.3901C37.3511 27.8794 37.7565 27.2729 38.033 26.6055C38.3096 25.938 38.4519 25.2226 38.4519 24.5001C38.4519 23.7776 38.3096 23.0622 38.033 22.3948C37.7565 21.7273 37.3511 21.1209 36.8401 20.6101V20.6101Z" stroke="#6100C2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill={shouldFill ? '#6100C2' : ''} />

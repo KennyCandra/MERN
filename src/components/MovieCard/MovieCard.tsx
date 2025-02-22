@@ -1,15 +1,27 @@
 import { HugIcon } from "../../assets/images/icons"
+import type { Movie } from "../../pages/home/Home"
 
-function MovieCard() {
+type MovieProps = Movie & {
+    isInWatchList: boolean,
+    addToWatchList: () => void,
+    removeFromWatchList: () => void,
+    isActive: boolean,
+    setIndex: React.Dispatch<React.SetStateAction<number>>,
+    movieKey: number,
+    className?: string
+    onClick: () => void
+}
+function MovieCard({ genre, id, image, title, year, isInWatchList, addToWatchList, removeFromWatchList, isActive, setIndex, movieKey, className }: MovieProps) {
+
     return (
-        <div className='aspect-[0.81/1] w-[255px] border-white border-2 rounded-lg shadow-lg font-Poppins text-black mt-60 relative select-none'>
-            <HugIcon className="absolute top-0 right-0 size-14 p-2 cursor-pointer active:scale-95 transition-all duration-300" />
-            <img src={"./images/background.jpg"} alt="image-bg" className="aspect-[0.81/1] w-[255px] overflow-hidden rounded-lg" />
-            <div className="bottom-0 left-0 bg-gradient-white absolute py-2 px-4 opacity-95 rounded-t-lg z-10 w-full">
-                <h1 className="text-2xl font-semibold">First movie</h1>
-                <span className="text-sm font-normal">2024 | Action, Adventure</span>
+        <div key={id} className={`${!isActive ? 'opacity-75 ' : 'opacity-100'} ${className}`}>
+            <HugIcon handleClick={() => isInWatchList ? removeFromWatchList() : addToWatchList()} shouldFill={isInWatchList} className="absolute top-0 right-0 size-14 p-2 cursor-pointer active:scale-95 transition-all duration-300" />
+            <img src={image} alt="image-bg" className="aspect-[0.81/1] object-cover object-center overflow-hidden rounded-lg" onClick={() => { setIndex(movieKey) }} />
+            <div className="bg-gradient-white py-2 px-4 opacity-95 rounded-t-lg z-10 w-full">
+                <h1 className="text-2xl font-semibold">{title}</h1>
+                <span className="text-sm font-normal">{year} | {genre}</span>
             </div>
-        </div>
+        </div >
     )
 }
 

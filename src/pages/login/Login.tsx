@@ -51,7 +51,6 @@ function Login(): JSX.Element {
   }
 
   return (
-    // bg-[linear-gradient(to_right_bottom,rgba(97,0,194,0.8),rgba(25,24,23,0.8)),url('/images/icon-bg.jpg')]
     <div className="flex items-center justify-center w-full text-white
     bg-[linear-gradient(to_right_bottom,rgba(97,0,194,0.8),rgba(25,24,23,0.8)),url('/images/background.jpg')]
     bg-cover h-screen">

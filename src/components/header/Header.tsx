@@ -22,7 +22,7 @@ function Header() {
     ]
 
     return (
-        <header className="bg-primary w-[80vw] fixed">
+        <header className="bg-primary z-10 absolute w-full">
             <div className="flex justify-between max-w-[1024px] mx-auto self-center py-4">
                 <div className="space-x-8">
                     {variables.map(link => {

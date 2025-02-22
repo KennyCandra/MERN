@@ -16,7 +16,6 @@ const RequireAuth = () => {
                 method: "GET",
                 credentials: "include",
                 headers: {
-
                     "Content-Type": "application/json",
                 },
             });
@@ -39,7 +38,9 @@ const RequireAuth = () => {
             const apiRes = await fetch(`http://localhost:8001/user/refresh-token`, {
                 method: "GET",
                 credentials: "include",
-
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
             if (apiRes.ok) {
                 return true
