@@ -2,7 +2,7 @@ import { Movie } from '../home/Home'
 import FavouriteMovieComponents from '../../components/FavouriteMovieComponents/FavouriteMovieComponents'
 import { useAppSelector } from '../../utils/hooks/hooks'
 
-function Favourite() {
+function Trending() {
     const { user } = useAppSelector(state => state.userRed)
 
     const movie: Movie[] = [
@@ -23,7 +23,7 @@ function Favourite() {
     ]
     return (
         <div className='mt-[60px] text-white ml-5'>
-            <h1 className='font-Poppins text-3xl mb-5 font-semibold'>Favourites</h1>
+            <h1 className='font-Poppins text-3xl mb-5 font-semibold'>Trending</h1>
             <div className='flex gap-5 flex-wrap'>
                 {movie.map(movie => {
                     return (
@@ -44,4 +44,4 @@ function Favourite() {
     )
 }
 
-export default Favourite
+export default Trending

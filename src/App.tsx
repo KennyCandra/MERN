@@ -8,6 +8,7 @@ import store from "./redux/store/rootStore";
 import { Provider } from "react-redux";
 import Layout from "./components/layout/Layout";
 import Favourite from "./pages/Favourite/Favourite";
+import Trending from "./pages/Trending/Trending";
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path='/favourite' element={<Favourite />} />
+              <Route path='/trending' element={<Trending />} /> //do this element
+              <Route path="/lists" element={<Favourite />} /> // do this element
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

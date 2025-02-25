@@ -32,6 +32,12 @@ const Links: Link[] = [
         path: "/trending",
         icon: <TrendingIcon className="" />
     },
+    {
+        id: 4,
+        name: "Lists",
+        path: "/lists",
+        icon: <MoviesIcon className="" />
+    }
 ]
 
 
