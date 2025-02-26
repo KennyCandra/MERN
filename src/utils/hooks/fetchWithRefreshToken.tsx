@@ -1,6 +1,5 @@
 // custom to fetch data with refresh token
 import { useState } from "react"
-import { useNavigate } from "react-router"
 
 let isRefreshing = false
 let waittingRequest: (() => void)[] = []
@@ -8,13 +7,13 @@ let waittingRequest: (() => void)[] = []
 export function useFetchWithRefToken() {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
-    const navigate = useNavigate()
 
     const fetchWithRefToken = async (url: string, option?: RequestInit) => {
         setLoading(true)
 
         try {
-            let response = await fetch(url, {
+            console.log('here')
+            let response = await fetch(`http://localhost:8001/${url}`, {
                 ...option,
                 credentials: "include"
             });
@@ -30,11 +29,11 @@ export function useFetchWithRefToken() {
                         });
 
                         if (!refreshTokenResponse.ok) {
-                            navigate('/login')
+                            window.location.href = '/login'
                             throw new Error('refresh token')
                         }
 
-                        response = await fetch(url, {
+                        response = await fetch(`http://localhost:8001/${url}`, {
                             ...option,
                             credentials: "include"
                         });
@@ -49,11 +48,11 @@ export function useFetchWithRefToken() {
                     await new Promise<void>((resolve) => {
                         waittingRequest.push(resolve)
                     })
-                    return fetchWithRefToken(url, option)
+                    return fetchWithRefToken(`http://localhost:8001/${url}`, option)
                 }
             }
 
-            return response
+            return response.json()
         } catch (err) {
             setError('An error Occured please try again')
             throw err

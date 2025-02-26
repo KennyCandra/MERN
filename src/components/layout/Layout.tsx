@@ -43,13 +43,13 @@ const Links: Link[] = [
 
 const CommunityLinks: Link[] = [
     {
-        id: 4,
+        id: 5,
         name: "Community",
         path: "/community",
         icon: <CommunityIcon className="" />
     },
     {
-        id: 5,
+        id: 6,
         name: "Chat",
         path: "/chat",
         icon: <ChatIcon className="" />
@@ -59,13 +59,13 @@ const CommunityLinks: Link[] = [
 
 const SettingsLinks: Link[] = [
     {
-        id: 6,
+        id: 7,
         name: "Settings",
-        path: "/settings",
+        path: "/setting",
         icon: <SettingsIcon className="" />
     },
     {
-        id: 7,
+        id: 8,
         name: "Logout",
         path: "/logout",
         icon: <LogOutIcon className="" />
@@ -107,7 +107,9 @@ function Layout() {
             </aside>
             <main className='w-[83.33%]'>
                 <Header />
-                <Outlet />
+                <div className='mt-24 ml-5'>
+                    <Outlet />
+                </div>
             </main>
         </div>
     )

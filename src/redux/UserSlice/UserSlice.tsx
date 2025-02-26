@@ -7,6 +7,8 @@ export interface User {
     lists: string[],
     watchList: string[],
     id: string,
+    reviwes: string[]
+    ratedMovies: string[]
 }
 
 type initialStateType = {
@@ -20,6 +22,8 @@ const initialState: initialStateType = {
         lists: [],
         watchList: [],
         id: '',
+        reviwes: [],
+        ratedMovies: []
     },
 }
 
@@ -32,6 +36,11 @@ const userSlice = createSlice({
         },
         logout: (state) => {
             state.user = null
+        },
+        setWatchList: (state, action: PayloadAction<string[]>) => {
+            if (state.user) {
+                state.user.watchList = action.payload
+            }
         },
         addToWatchList: (state, action: PayloadAction<string>) => {
             if (state.user) {
@@ -48,7 +57,7 @@ const userSlice = createSlice({
     },
 })
 
-export const { setUser, logout, addToWatchList, removeFromWatchList } = userSlice.actions
+export const { setUser, logout, setWatchList, addToWatchList, removeFromWatchList } = userSlice.actions
 
 export const selectUser = (state: RootState) => state.userRed.user
 

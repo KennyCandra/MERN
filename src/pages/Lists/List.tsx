@@ -1,11 +1,25 @@
 import { Movie } from '../home/Home'
 import FavouriteMovieComponents from '../../components/FavouriteMovieComponents/FavouriteMovieComponents'
 import { useAppSelector } from '../../utils/hooks/hooks'
+import { useEffect } from 'react'
+import { useFetchWithRefToken } from '../../utils/hooks/fetchWithRefreshToken'
 
 function List() {
     const { user } = useAppSelector(state => state.userRed)
+    const { fetchWithRefToken } = useFetchWithRefToken()
 
-    const movie: Movie[] = [
+    useEffect(() => {
+        const fetchLists = async () => {
+            const response = await fetchWithRefToken('http://localhost:8001/list/67b8ce505128ab7bb36086fd/lists', {
+                credentials: 'include'
+            })
+            console.log(response)
+        }
+        console.log('i am here')
+        fetchLists()
+    }, [])
+
+    const movie = [
         {
             id: 1,
             genre: ["Action", "Adventure"],

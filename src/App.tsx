@@ -9,20 +9,28 @@ import { Provider } from "react-redux";
 import Layout from "./components/layout/Layout";
 import Favourite from "./pages/Favourite/Favourite";
 import Trending from "./pages/Trending/Trending";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
+import List from "./pages/Lists/List";
+import MoviesPage from "./pages/MoviesPage/MoviesPage";
 
 function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route element={<RequireAuth />}>
-            <Route element={<Layout />}>
+
+          <Route element={<Layout />}>
+            <Route element={<RequireAuth />}>
               <Route path="/" element={<Home />} />
               <Route path='/favourite' element={<Favourite />} />
               <Route path='/trending' element={<Trending />} /> //do this element
-              <Route path="/lists" element={<Favourite />} /> // do this element
+              <Route path="/lists" element={<List />} /> // do this element
+              <Route path="/profile" element={<ProfilePage />} />
             </Route>
+
+            <Route element={<MoviesPage />} path="/movies" />
           </Route>
+
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotAuthenticated />} />
         </Routes>
