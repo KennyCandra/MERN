@@ -1,39 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { setUser } from "../../redux/UserSlice/UserSlice";
 import { useFetchWithRefToken } from "../../utils/hooks/fetchWithRefreshToken";
 import { useAppDispatch } from "../../utils/hooks/hooks";
 import { setTrendingMovies } from "../../redux/TrendingSlice/Trending";
 
-
 const RequireAuth = () => {
     const dispatch = useAppDispatch();
-    const [success, setSuccess] = useState<boolean>(true)
-    const { fetchWithRefToken, loading } = useFetchWithRefToken()
+    const { fetchWithRefToken, loading, error } = useFetchWithRefToken();
 
-    const tryFetchUser = async () => {
-        const response = await fetchWithRefToken('user')
-        dispatch(setUser(response.user))
+    const fetchUser = async () => {
+        const user = await fetchWithRefToken('user')
+        dispatch(setUser(user.user))
     }
 
-        const fetchTopMovies = async () => {
-            const response = await fetchWithRefToken('top-movies')
-            dispatch(setTrendingMovies(response.topMovies))
-        }
+    const fetchTopMovies = async () => {
+        const topMovie = await fetchWithRefToken('top-movies')
+        dispatch(setTrendingMovies(topMovie.topMovies))
+    }
 
     useEffect(() => {
-        tryFetchUser()
+        fetchUser()
         fetchTopMovies()
     }, [])
 
-    if (loading) {
-        return <div>Loading...</div>
-    }
+    if (loading) return <h1>Loading....</h1>
 
-    return success ? <Outlet /> : <Navigate to={'/login'} />
 
-}
-
+    return error ? <Navigate to='/login' /> : <Outlet />;
+};
 
 export default RequireAuth;
 

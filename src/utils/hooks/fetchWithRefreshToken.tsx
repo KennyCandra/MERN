@@ -12,7 +12,6 @@ export function useFetchWithRefToken() {
         setLoading(true)
 
         try {
-            console.log('here')
             let response = await fetch(`http://localhost:8001/${url}`, {
                 ...option,
                 credentials: "include"

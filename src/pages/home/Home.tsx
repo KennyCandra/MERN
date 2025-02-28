@@ -1,9 +1,10 @@
 import { RootState } from "../../redux/store/rootStore";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks/hooks";
-import {  useState } from "react";
+import { useAppSelector } from "../../utils/hooks/hooks";
+import { useState } from "react";
 import CustomButton from "../../components/button/CustomButton";
 import { HugIcon } from "../../assets/images/icons";
 import MovieCard from "../../components/MovieCard/MovieCard";
+import { Link, useNavigate } from "react-router-dom";
 
 export type Movie = {
   backdrop_path: string
@@ -23,9 +24,11 @@ function Home() {
     trending: state.trendingRed.trending
   }));
   const [index, setIndex] = useState<number>(1);
-  const dispatch = useAppDispatch();
-  const [movies, setMovies] = useState<Movie[]>(trending.slice(0, 4))
+  const movies = trending.slice(0, 4)
   const currentMovie = movies[index]
+  const navigate = useNavigate()
+
+  if (currentMovie === undefined) return <h1>loading...</h1>
 
   return (
     <div>
@@ -35,9 +38,10 @@ function Home() {
         <div
           className="h-[455px] w-full bg-gradient-to-r from-purple-800/80 to-black/80"
           style={{
-            backgroundImage: `linear-gradient(to right bottom, rgba(97,0,194,0.8), rgba(25,24,23,0.8)), url(https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path})`,
-            backgroundSize: "cover",
+            backgroundImage: `linear-gradient(to right bottom, rgba(97,0,194,0.5), rgba(25,24,23,0.5)), url(https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path})`,
+            backgroundSize: "100% 100%",
             backgroundPosition: "center",
+            backgroundRepeat: 'no-repeat',
           }}
         ></div>
 
@@ -59,9 +63,9 @@ function Home() {
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-5 flex flex-col">
         <h1 className="text-4xl font-bold ml-4 text-white font-Poppins">Trending</h1>
-        <div className="flex overflow-x-auto overflow-y-visible mt-5 gap-5 h-[500px]">
+        <div className="flex mt-5 gap-5">
           {movies.map((movie, key) => (
             <MovieCard
               key={movie._id}
@@ -77,11 +81,15 @@ function Home() {
               addToWatchList={() => console.log('hello')}
               removeFromWatchList={() => console.log('world')}
               setIndex={setIndex}
-              onClick={() => console.log('hello world')}
+              onClick={() => navigate(`/movie/${movie._id}`)}
             />
           ))}
         </div>
+        <div className="mt-5 self-center">
+          <CustomButton><Link to='/trending'>Check all the trending</Link></CustomButton>
+        </div>
       </div>
+
 
     </div>
   );

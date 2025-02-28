@@ -12,6 +12,7 @@ import Trending from "./pages/Trending/Trending";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import List from "./pages/Lists/List";
 import MoviesPage from "./pages/MoviesPage/MoviesPage";
+import SingleMoviePage from "./pages/SingleMoviePage/SingleMoviePage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
           <Route element={<Layout />}>
             <Route element={<RequireAuth />}>
+              <Route path="/movie/:id" element={<SingleMoviePage />} />
               <Route path="/" element={<Home />} />
               <Route path='/favourite' element={<Favourite />} />
               <Route path='/trending' element={<Trending />} /> //do this element
