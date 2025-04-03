@@ -1,10 +1,11 @@
-import { RootState } from "../../redux/store/rootStore";
-import { useAppSelector } from "../../utils/hooks/hooks";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import CustomButton from "../../components/button/CustomButton";
 import { HugIcon } from "../../assets/images/icons";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import userStore from "../../zustand/UserStore/UserStore";
+import { useWatchListFunctions } from "../../utils/services/watchListFns";
 
 export type Movie = {
   backdrop_path: string
@@ -15,28 +16,47 @@ export type Movie = {
   title: string;
   vote_average: number;
   vote_count: number;
-  _id: number;
+  _id: string;
 };
 
 function Home() {
-  const { user, trending } = useAppSelector((state: RootState) => ({
-    user: state.userRed.user,
-    trending: state.trendingRed.trending
-  }));
-  const [index, setIndex] = useState<number>(1);
-  const movies = trending.slice(0, 4)
-  const currentMovie = movies[index]
-  const navigate = useNavigate()
 
-  if (currentMovie === undefined) return <h1>loading...</h1>
+  const [index, setIndex] = useState<number>(0);
+  const navigate = useNavigate()
+  const [movies, setMovies] = useState<Movie[] | null>(null)
+  const { watchList } = userStore()
+  const { addMovieToWatchList, error, loading, removeMovieFromWatchList } = useWatchListFunctions()
+
+
+  const { isLoading } = useQuery({
+    queryKey: ['trending'],
+    queryFn: () => fetch('http://localhost:8001/top-movies').then(res => res.json()).then(response => {
+      const slicedMovies = response.topMovies.slice(0, 4)
+      setMovies(slicedMovies)
+      return response
+    }),
+  })
+
+  const currentMovie = movies && movies[index] || null
+
+  const addCurrentMovieToWatchList = useCallback((movieId: string) => {
+    addMovieToWatchList(movieId)
+  }, [movies])
+
+
+  const removeCurrentMovieFromWatchList = useCallback((movieId: string) => {
+    removeMovieFromWatchList(movieId)
+  }, [movies])
+
+  if (isLoading) return <div>loading.....</div>
 
   return (
     <div>
-      <div
+      {currentMovie && <div
         className="h-[455px] relative w-full flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide "
       >
         <div
-          className="h-[455px] w-full bg-gradient-to-r from-purple-800/80 to-black/80"
+          className="h-[455px] w-full  to-black/80"
           style={{
             backgroundImage: `linear-gradient(to right bottom, rgba(97,0,194,0.5), rgba(25,24,23,0.5)), url(https://image.tmdb.org/t/p/original/${currentMovie.backdrop_path})`,
             backgroundSize: "100% 100%",
@@ -57,29 +77,29 @@ function Home() {
               handleClick={() =>
                 console.log('hello')
               }
-              shouldFill={user?.watchList.includes(currentMovie._id.toString()) ?? false}
+              shouldFill={watchList.includes(currentMovie._id.toString()) ?? false}
             />
           </div>
         </div>
-      </div>
+      </div>}
 
       <div className="mt-5 flex flex-col">
         <h1 className="text-4xl font-bold ml-4 text-white font-Poppins">Trending</h1>
         <div className="flex mt-5 gap-5">
-          {movies.map((movie, key) => (
+          {movies?.map((movie, key) => (
             <MovieCard
               key={movie._id}
-              isInWatchList={user?.watchList.includes(movie._id.toString()) ?? false}
+              isInWatchList={watchList.includes(movie._id.toString()) ?? false}
               genre={movie.genres}
               title={movie.title}
               year={movie.release_date}
               image={movie.backdrop_path}
-              id={movie._id}
+              id={Number(movie._id)}
               movieKey={key}
               isActive={index === key}
               className="w-[17.8vw] ml-4 overflow-hidden h-fit flex-shrink-0 border-white border-2 rounded-lg shadow-lg font-Poppins text-black relative select-none hover:scale-105 hover:opacity-100 cursor-pointer transition-all duration-300"
-              addToWatchList={() => console.log('hello')}
-              removeFromWatchList={() => console.log('world')}
+              addToWatchList={() => addCurrentMovieToWatchList(movie._id)}
+              removeFromWatchList={() => removeCurrentMovieFromWatchList(movie._id)}
               setIndex={setIndex}
               onClick={() => navigate(`/movie/${movie._id}`)}
             />

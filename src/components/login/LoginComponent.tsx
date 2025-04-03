@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ErrorState, LoginFormData } from '../../pages/login/Login';
-import { setUser } from '../../redux/UserSlice/UserSlice';
 import { useNavigate } from 'react-router-dom';
 import Error from '../error-auth/Error';
+import userStore from '../../zustand/UserStore/UserStore';
 
 
 function LoginComponent({ error, setError }: { error: ErrorState | null, setError: React.Dispatch<React.SetStateAction<ErrorState | null>> }) {
@@ -11,6 +11,7 @@ function LoginComponent({ error, setError }: { error: ErrorState | null, setErro
         email: '',
         password: '',
     });
+    const { setIsAuthenticated, setWatchList, setAccessToken, setUser } = userStore()
 
     useEffect(() => {
         if (error) {
@@ -61,10 +62,12 @@ function LoginComponent({ error, setError }: { error: ErrorState | null, setErro
                     setError({ type: 'server', message: 'Something went wrong. Please try again later.' });
                 }
             } else {
-                setError({type : 'success', message : 'Login successful'})
+                setError({ type: 'success', message: 'Login successful' })
                 const data = await response.json();
-                setUser(data.user);
-                localStorage.setItem('accessToken' , data.accessToken)
+                setUser(data.user.name)
+                setIsAuthenticated(true)
+                setWatchList(data.user.watchList)
+                setAccessToken(data.accessToken)
                 navigate('/');
             }
         } catch (error) {
@@ -85,9 +88,8 @@ function LoginComponent({ error, setError }: { error: ErrorState | null, setErro
                     <input
                         type="email"
                         id="login-email"
-                        className={`border-2 rounded-md p-2 ${
-                            error?.type === 'email' ? 'border-red-500' : 'border-gray-600'
-                        }`}
+                        className={`border-2 rounded-md p-2 ${error?.type === 'email' ? 'border-red-500' : 'border-gray-600'
+                            }`}
                         placeholder="Email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -100,9 +102,8 @@ function LoginComponent({ error, setError }: { error: ErrorState | null, setErro
                     <input
                         type="password"
                         id="login-password"
-                        className={`border-2 rounded-md p-2 ${
-                            error?.type === 'password' ? 'border-red-500' : 'border-gray-600'
-                        }`}
+                        className={`border-2 rounded-md p-2 ${error?.type === 'password' ? 'border-red-500' : 'border-gray-600'
+                            }`}
                         placeholder="Password"
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}

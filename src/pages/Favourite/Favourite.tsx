@@ -1,9 +1,8 @@
-import { Movie } from '../home/Home'
 import FavouriteMovieComponents from '../../components/FavouriteMovieComponents/FavouriteMovieComponents'
-import { useAppSelector } from '../../utils/hooks/hooks'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useFetchWithRefToken } from '../../utils/hooks/fetchWithRefreshToken'
-import CustomButton from '../../components/button/CustomButton'
+import { useQuery } from '@tanstack/react-query'
+import userStore from '../../zustand/UserStore/UserStore'
 
 interface WatchListMovie {
     backdrop_path: string
@@ -18,32 +17,29 @@ interface WatchListMovie {
 }
 
 function Favourite() {
-    const { user } = useAppSelector(state => state.userRed)
-    const { fetchWithRefToken } = useFetchWithRefToken()
+    const { accessToken } = userStore()
+    const { fetchWithRefToken } = useFetchWithRefToken(accessToken)
     const [movies, setMoives] = useState<WatchListMovie[]>([])
+    const { isLoading } = useQuery({
+        queryKey: ['WatchList'],
+        queryFn: () => fetchWithRefToken(`user/watchlist/67b8ce505128ab7bb36086fd`).then(res => {
+            setMoives(res.watchList)
+            return res
+        })
+    })
+    const { watchList } = userStore()
 
-    const fetchFavouriteList = async () => {
-        const response = await fetchWithRefToken(`user/watchlist/${user?.id}`)
-        setMoives(response.watchList)
-    }
-
-    useEffect(() => {
-        if (user) {
-            fetchFavouriteList()
-        }
-    }, [user])
+    if (isLoading) return <div>loading....</div>
 
     return (
         <div className='mt-[60px] text-white ml-5'>
-            <CustomButton onClick={() => console.log(movies)}>movies</CustomButton>
-            <CustomButton onClick={() => console.log(user)}>user</CustomButton>
             <h1 className='font-Poppins text-3xl mb-5 font-semibold'>Favourites</h1>
             <div className='flex gap-5 flex-wrap'>
                 {movies.map(movie => {
                     return (
                         <FavouriteMovieComponents
                             key={movie._id}
-                            isInWatchList={user?.watchList.includes(movie._id.toString()) ?? false}
+                            isInWatchList={watchList.includes(movie._id.toString()) ?? false}
                             genre={movie.genres}
                             title={movie.title}
                             year={movie.release_date}

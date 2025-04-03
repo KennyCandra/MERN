@@ -1,13 +1,22 @@
 
+import {useState } from 'react'
 import FavouriteMovieComponents from '../../components/FavouriteMovieComponents/FavouriteMovieComponents'
-import { useAppSelector } from '../../utils/hooks/hooks'
 import type { Movie } from '../home/Home'
+import { useQuery } from '@tanstack/react-query'
 
 function Trending() {
-    const { user, trending } = useAppSelector(state => ({
-        user: state.userRed.user,
-        trending: state.trendingRed.trending
-    }))
+    const [trending, setTrending] = useState<Movie[] | null>(null)
+
+    const { isLoading} = useQuery({
+        queryKey: ['trending'],
+        queryFn: () => fetch('http://localhost:8001/top-movies').then(res => res.json()).then(response => {
+            setTrending(response.topMovies)
+            return response
+        }),
+      })
+
+    if (isLoading) return <div>loading.....</div>
+
 
     return (
         <div className='mt-[60px] text-white ml-5'>
@@ -17,7 +26,7 @@ function Trending() {
                     return (
                         <FavouriteMovieComponents
                             key={movie._id}
-                            isInWatchList={user?.watchList.includes(movie._id.toString()) ?? false}
+                            // isInWatchList={user?.watchList.includes(movie._id.toString()) ?? false}
                             genre={movie.genres}
                             title={movie.title}
                             year={movie.release_date}

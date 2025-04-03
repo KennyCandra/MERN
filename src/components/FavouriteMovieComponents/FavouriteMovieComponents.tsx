@@ -1,7 +1,7 @@
 import { HugIcon } from "../../assets/images/icons";
 
 type MovieProps = {
-    isInWatchList: boolean;
+    isInWatchList?: boolean;
     className: string
     year: any
     genre: string[]

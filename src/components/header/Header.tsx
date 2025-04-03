@@ -1,10 +1,10 @@
 import { NotificationIcon, ProfileIcon, SearchIcon } from "../../assets/images/icons"
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/store/rootStore'
+import userStore from "../../zustand/UserStore/UserStore"
 
 function Header() {
-    const user = useSelector((state: RootState) => state.userRed.user)
+
+    const { name } = userStore()
 
     const variables = [
         {
@@ -39,7 +39,7 @@ function Header() {
                     <NotificationIcon className="size-5" />
                     <div className="flex items-center gap-2">
                         <ProfileIcon className="size-6" />
-                        <Link to={'/profile'} className='font-medium font-Poppins text-lg'>{user?.name}</Link>
+                        <Link to={'/profile'} className='font-medium font-Poppins text-lg'>{name}</Link>
                     </div>
                 </div>
             </div>

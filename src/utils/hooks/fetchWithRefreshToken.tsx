@@ -4,17 +4,21 @@ import { useState } from "react"
 let isRefreshing = false
 let waittingRequest: (() => void)[] = []
 
-export function useFetchWithRefToken() {
+export function useFetchWithRefToken(accessToken: string) {
     const [loading, setLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
     const fetchWithRefToken = async (url: string, option?: RequestInit) => {
         setLoading(true)
+        setError(null)
 
         try {
             let response = await fetch(`http://localhost:8001/${url}`, {
+                headers: {
+                    Authorization: accessToken,
+                    'Content-Type': 'application/json'
+                },
                 ...option,
-                credentials: "include"
             });
 
             if (response.status === 401) {
@@ -23,7 +27,6 @@ export function useFetchWithRefToken() {
 
                     try {
                         const refreshTokenResponse = await fetch('http://localhost:8001/user/refresh-token', {
-                            ...option,
                             credentials: "include"
                         });
 
@@ -34,7 +37,6 @@ export function useFetchWithRefToken() {
 
                         response = await fetch(`http://localhost:8001/${url}`, {
                             ...option,
-                            credentials: "include"
                         });
 
 

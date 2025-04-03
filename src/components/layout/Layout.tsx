@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Link, Outlet } from 'react-router-dom'
 import { LogoSvg } from '../../assets/logo/logoSvg'
 import { ChatIcon, CommunityIcon, FavIcon, LogOutIcon, MoviesIcon, SettingsIcon, TrendingIcon } from '../../assets/images/icons'
 import CustomNavLink from '../navLinkComp/CustomNavLink'
@@ -74,7 +74,7 @@ const SettingsLinks: Link[] = [
 
 
 const getClassName = (isActive: boolean) => {
-    return (isActive ? "text-white" : "text-white/50") + " flex items-center gap-5 font-Poppins font-bold"
+    return (isActive ? "text-white before:absolute before:h-full before:bg-white before:w-[5px] before:left-[-10px] rounded" : "text-white/50") + " flex items-center gap-5 font-Poppins relative font-bold"
 }
 
 function Layout() {
@@ -107,7 +107,7 @@ function Layout() {
             </aside>
             <main className='w-[83.33%]'>
                 <Header />
-                <div className='mt-24 ml-5'>
+                <div className='mt-24 ml-2'>
                     <Outlet />
                 </div>
             </main>

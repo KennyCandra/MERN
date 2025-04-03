@@ -1,34 +1,63 @@
-import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { setUser } from "../../redux/UserSlice/UserSlice";
-import { useFetchWithRefToken } from "../../utils/hooks/fetchWithRefreshToken";
-import { useAppDispatch } from "../../utils/hooks/hooks";
-import { setTrendingMovies } from "../../redux/TrendingSlice/Trending";
+import userStore from "../../zustand/UserStore/UserStore";
+import { useQuery } from "@tanstack/react-query";
+
+interface RefreshTokenResponse {
+    user: {
+        name: string;
+        watchList: string[];
+    };
+    accessToken: string;
+}
 
 const RequireAuth = () => {
-    const dispatch = useAppDispatch();
-    const { fetchWithRefToken, loading, error } = useFetchWithRefToken();
 
-    const fetchUser = async () => {
-        const user = await fetchWithRefToken('user')
-        dispatch(setUser(user.user))
+    const { isAuthenticated, setUser, setIsAuthenticated, setWatchList, setAccessToken } = userStore();
+
+    const { isLoading, data, error, isError } = useQuery<RefreshTokenResponse>({
+        queryKey: ['Auth'],
+        queryFn: async () => {
+            const response = await fetch('http://localhost:8001/user/refresh-token', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Accept": "application/json",
+                },
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData?.message || 'Not Authenticated')
+            }
+            return response.json();
+        },
+        enabled: !isAuthenticated,
+        retry: false
+    });
+
+
+    if (isAuthenticated) {
+        return <Outlet />;
     }
 
-    const fetchTopMovies = async () => {
-        const topMovie = await fetchWithRefToken('top-movies')
-        dispatch(setTrendingMovies(topMovie.topMovies))
+    if (isLoading) {
+        return <div>Loading...</div>;
     }
 
-    useEffect(() => {
-        fetchUser()
-        fetchTopMovies()
-    }, [])
+    if (isError) {
+        console.log(error.message)
+        return < Navigate to={'/login'} />
+    }
 
-    if (loading) return <h1>Loading....</h1>
+    if (data) {
+        setIsAuthenticated(true);
+        setUser(data.user.name);
+        setAccessToken(data.accessToken);
+        setWatchList(data.user.watchList);
+        return <Outlet />;
+    }
 
-
-    return error ? <Navigate to='/login' /> : <Outlet />;
+    return <Navigate to='/login' />;
 };
 
 export default RequireAuth;
-

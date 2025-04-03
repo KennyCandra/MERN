@@ -7,7 +7,7 @@ interface CustomButtonProps {
 
 function CustomButton({ children, onClick, className }: CustomButtonProps) {
   return (
-    <button className={className ? className : "bg-purple text-white px-4 py-2 rounded-md active:scale-95 transition-all duration-300"} onClick={onClick}>
+    <button className={className ? className : "bg-purple text-white px-4 py-2 rounded-md active:scale-95 transition-all duration-300 hover:scale-105"} onClick={onClick}>
       {children}
     </button>
 )

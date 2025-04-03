@@ -1,11 +1,9 @@
 import { Movie } from '../home/Home'
 import FavouriteMovieComponents from '../../components/FavouriteMovieComponents/FavouriteMovieComponents'
-import { useAppSelector } from '../../utils/hooks/hooks'
 import { useEffect } from 'react'
 import { useFetchWithRefToken } from '../../utils/hooks/fetchWithRefreshToken'
 
 function List() {
-    const { user } = useAppSelector(state => state.userRed)
     const { fetchWithRefToken } = useFetchWithRefToken()
 
     useEffect(() => {
@@ -43,7 +41,7 @@ function List() {
                     return (
                         <FavouriteMovieComponents
                             key={movie.id}
-                            isInWatchList={user?.watchList.includes(movie.id.toString()) ?? false}
+                            // isInWatchList={user?.watchList.includes(movie.id.toString()) ?? false}
                             genre={movie.genre}
                             title={movie.title}
                             year={movie.year}
