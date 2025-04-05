@@ -18,12 +18,12 @@ export const useWatchListFunctions = () => {
                 body: JSON.stringify({ movieId: movieId })
             })
 
-            if (!response.ok) {
-                removeFromWatchList(movieId)
+
+            if (error) {
                 throw new Error('Failed to add movie to watchlist')
             }
-            const res = await response.json()
-            return res
+
+            return response
         } catch (err) {
             removeFromWatchList(movieId)
             console.error(error)
@@ -41,22 +41,18 @@ export const useWatchListFunctions = () => {
             body: JSON.stringify({ movieId: movieId })
         })
 
-        if (!response.ok) {
-            addToWatchList(movieId)
+
+        if (error) {
             throw new Error('Failed to remove movie from watchlist')
         }
 
-        const res = response.json()
-        return res
+        return response
     }
 
 
     return {
         loading,
-        error,
         addMovieToWatchList,
         removeMovieFromWatchList
     }
-
-
 }

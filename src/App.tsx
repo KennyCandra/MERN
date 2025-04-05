@@ -11,23 +11,24 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import List from "./pages/Lists/List";
 import MoviesPage from "./pages/MoviesPage/MoviesPage";
 import SingleMoviePage from "./pages/SingleMoviePage/SingleMoviePage";
+import SoloList from "./pages/SoloList/SoloList";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-
         <Route element={<Layout />}>
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Home />} />
-            <Route path='/favourite' element={<Favourite />} />
-            <Route path='/trending' element={<Trending />} /> //do this element
-            <Route path="/lists" element={<List />} /> // do this element
+            <Route path="/favourite" element={<Favourite />} />
+            <Route path="/trending" element={<Trending />} />
+            <Route path="/lists" element={<List />} />
+            <Route path="/list/:listId" element={<SoloList />} />
             <Route path="/profile" element={<ProfilePage />} />
-          </Route>
+            <Route path="/movie/:id" element={<SingleMoviePage />} />
+            <Route element={<MoviesPage />} path="/movies" />
 
-          <Route path="/movie/:id" element={<SingleMoviePage />} />
-          <Route element={<MoviesPage />} path="/movies" />
+          </Route>
         </Route>
 
         <Route path="/login" element={<Login />} />
