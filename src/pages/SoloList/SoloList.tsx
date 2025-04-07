@@ -2,9 +2,11 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { ListType } from "../Lists/List";
 import FavouriteMovieComponents from "../../components/FavouriteMovieComponents/FavouriteMovieComponents";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useWatchListFunctions } from "../../utils/services/watchListFns";
 import userStore from "../../zustand/UserStore/UserStore";
+import CustomButton from "../../components/button/CustomButton";
+import ListModal from "../../components/ListModal/ListModal";
 
 type response = {
   message: string;
@@ -13,6 +15,7 @@ type response = {
 
 function SoloList() {
   const { listId } = useParams();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { addMovieToWatchList, removeMovieFromWatchList } =
     useWatchListFunctions();
   const { watchList } = userStore();
@@ -76,6 +79,17 @@ function SoloList() {
         })
       ) : (
         <div>you can add movies!</div>
+      )}
+
+      <CustomButton onClick={() => setModalOpen(true)}>
+        Edit your list
+      </CustomButton>
+      {modalOpen && (
+        <ListModal
+          editing={true}
+          setOpenListModal={setModalOpen}
+          List={data?.list!}
+        />
       )}
     </div>
   );

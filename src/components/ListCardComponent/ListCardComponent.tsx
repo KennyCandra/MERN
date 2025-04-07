@@ -34,7 +34,7 @@ function ListCardComponent({
         >
           {name}
         </Link>
-        <span className="text-sm font-normal">
+        <span className="block text-sm font-normal">
           {description !== "" && description}
         </span>
       </div>

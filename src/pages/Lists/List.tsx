@@ -3,6 +3,9 @@ import userStore from "../../zustand/UserStore/UserStore";
 import { useQuery } from "@tanstack/react-query";
 import ListCardComponent from "../../components/ListCardComponent/ListCardComponent";
 import { Movie } from "../home/Home";
+import CustomButton from "../../components/button/CustomButton";
+import ListModal from "../../components/ListModal/ListModal";
+import { useState } from "react";
 
 export type ListType = {
   _id: string;
@@ -14,6 +17,7 @@ export type ListType = {
 function List() {
   const { accessToken, userId } = userStore();
   const { fetchWithRefToken } = useFetchWithRefToken(accessToken);
+  const [addNewListModal, setAddNewListModal] = useState<boolean>(false);
 
   const { isLoading, data } = useQuery({
     queryKey: ["Lists"],
@@ -42,6 +46,13 @@ function List() {
           );
         })}
       </div>
+
+      <CustomButton onClick={() => setAddNewListModal(true)}>
+        Add New List
+      </CustomButton>
+      {addNewListModal && (
+        <ListModal setOpenListModal={setAddNewListModal} editing={false} />
+      )}
     </div>
   );
 }
